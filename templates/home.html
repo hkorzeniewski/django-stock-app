@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+{% extends 'base.html' %}
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+</head>
+
+<body>
+    {% block content %}
+    <h1>HOME PAGE</h1>
+    <div style="margin-left:25%;padding:1px 16px;height:1000px;">
+
+        <title>Home</title>
+        {% if user.is_authenticated %}
+            <p>Hi {{user.username}}</p> 
+            <a href="{% url 'logout' %}" class="button button2">Logout</a>
+        {% else %}
+
+        <a href="{% url 'login' %}" class="button button2">Login</a>
+        {% endif %} 
+
+    </div>
+    
+
+    {% endblock %}
+</body>
+
+</html>
