@@ -14,16 +14,18 @@
 
         <title>Home</title>
         {% if user.is_authenticated %}
-            <p>Hi {{user.username}}</p> 
-            <a href="{% url 'form' %}" class="button button2">Form</a>
-            <a href="{% url 'logout' %}" class="button button2">Logout</a>
+        <p>Hi {{user.username}}</p>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type="submit">Generate</button>
+        </form>
         {% else %}
-
-        <a href="{% url 'login' %}" class="button button2">Login</a>
-        {% endif %} 
-
+        <p>You are not logged in</p>
+        <a href="{% url 'login' %}" class="button button2">Log In</a>
+        {% endif %}
     </div>
-    
+
 
     {% endblock %}
 </body>

@@ -47,7 +47,9 @@ def home_view(request):
 
 
 def login_view(request):
+    print(request)
     form = LoginForm(request.POST or None)
+    print(form)
     if form.is_valid():
         username = form.cleaned_data.get("username")
         password = form.cleaned_data.get("password")
@@ -63,7 +65,7 @@ def login_view(request):
 def logout_view(request):
     logout(request)
     # request.user == Anon User
-    return redirect("/login")
+    return redirect("/")
 
 class UserList(generics.ListAPIView):
     queryset = User.objects.all()

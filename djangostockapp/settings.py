@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'app_1',
+    'app_2',
     'rest_framework',
     'corsheaders'
 ]
@@ -81,9 +82,18 @@ WSGI_APPLICATION = 'djangostockapp.wsgi.application'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
+    'default': {},
+    'users_db': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': str(os.getenv('DB_USERS_NAME')),
+        'USER': str(os.getenv('DB_USERS_USER')),
+        'PASSWORD': str(os.getenv('DB_USERS_PASSWORD')),
+        'HOST': str(os.getenv('DB_USERS_HOST')),
+        'PORT': '5432'
+    },
+    'company_db': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': str(os.getenv('DB_COMPANY_NAME')),
         'USER': str(os.getenv('DB_USERS_USER')),
         'PASSWORD': str(os.getenv('DB_USERS_PASSWORD')),
         'HOST': str(os.getenv('DB_USERS_HOST')),
@@ -139,3 +149,5 @@ AUTH_USER_MODEL = 'app_1.User'
 
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
+
+DATABASE_ROUTERS = ['routers.db_routers.AuthRouter', 'routers.db_routers.Company']
