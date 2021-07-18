@@ -1,7 +1,13 @@
-from .models import Company
+from rest_framework.fields import ModelField
+from django_filters.rest_framework import DjangoFilterBackend
+
+from .serializers import CompanySerializer, PricesSerializer
+from .models import Company, Prices
 from rest_framework import serializers
 from rest_framework.decorators import action
 from rest_framework.response import Response
+
+
 from django.shortcuts import render, redirect
 
 from rest_framework import generics
@@ -40,3 +46,13 @@ class CompanyView(FormView):
         end_date = form.cleaned_data.get("end_date")
         print(company_name, start_date, end_date)
         return redirect('/table')
+
+
+class CompanyViewSet(ModelViewSet):
+    queryset = Company.objects.all()
+    serializer_class = CompanySerializer
+    filter_backends = [DjangoFilterBackend]
+
+class PricesViewSet(ModelViewSet):
+    queryset = Prices.objects.all()
+    serializer_class = PricesSerializer

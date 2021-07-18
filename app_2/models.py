@@ -18,4 +18,4 @@ class Company(models.Model):
         ('CCC', 'CCC')
     )
     company_name = models.CharField(max_length=10, choices=COMPANY_NAMES)
-    prices = models.ForeignKey(Prices, on_delete=models.PROTECT)
+    prices = models.ManyToManyField(Prices)

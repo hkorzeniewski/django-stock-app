@@ -10,6 +10,7 @@ from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.decorators import action
 
+
 from .serializers import UserSerializer
 
 from .forms import LoginForm
@@ -22,28 +23,9 @@ class UserViewSet(ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
-    @action(methods=['POST'], detail=False)
-    def login(self, request):
-        username = request.data['username']
-        password = request.data['password']
-        user = User.objects.filter(username=username).first()
-        
-        if user is None:
-            return Response({'message': 'no such user'})
-
-        if not user.check_password(password):
-            return Response({'message': 'wrong password'})
-
-        return Response({'message':'logged in'})
     
 def home_view(request):
     return render(request, 'home.html', {})
-
-# def login_view(request):
-#     username = request.data['username']
-#     password = request.data['password']
-#     print(username, password)
-#     return render(request, 'login.html', {})
 
 
 def login_view(request):

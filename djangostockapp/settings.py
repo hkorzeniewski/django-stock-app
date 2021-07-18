@@ -44,7 +44,8 @@ INSTALLED_APPS = [
     'app_1',
     'app_2',
     'rest_framework',
-    'corsheaders'
+    'corsheaders',
+    'django_filters',
 ]
 
 MIDDLEWARE = [
@@ -145,9 +146,15 @@ STATIC_URL = '/static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+
+REST_FRAMEWORK = {
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
+}
+
 AUTH_USER_MODEL = 'app_1.User'
 
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
+
 
 DATABASE_ROUTERS = ['routers.db_routers.AuthRouter', 'routers.db_routers.Company']
