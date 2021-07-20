@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 from pathlib import Path
 import os
+
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -84,21 +85,29 @@ WSGI_APPLICATION = 'djangostockapp.wsgi.application'
 
 DATABASES = {
     'default': {},
+    # 'users_db': {
+    #     'ENGINE': 'django.db.backends.postgresql_psycopg2',
+    #     'NAME': str(os.getenv('DB_USERS_NAME')),
+    #     'USER': str(os.getenv('DB_USERS_USER')),
+    #     'PASSWORD': str(os.getenv('DB_USERS_PASSWORD')),
+    #     'HOST': str(os.getenv('DB_USERS_HOST')),
+    #     'PORT': 5432
+    # },
+    # 'company_db': {
+    #     'ENGINE': 'django.db.backends.postgresql_psycopg2',
+    #     'NAME': str(os.getenv('DB_COMPANY_NAME')),
+    #     'USER': str(os.getenv('DB_USERS_USER')),
+    #     'PASSWORD': str(os.getenv('DB_USERS_PASSWORD')),
+    #     'HOST': str(os.getenv('DB_USERS_HOST')),
+    #     'PORT': 5432
+    # }
     'users_db': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': str(os.getenv('DB_USERS_NAME')),
-        'USER': str(os.getenv('DB_USERS_USER')),
-        'PASSWORD': str(os.getenv('DB_USERS_PASSWORD')),
-        'HOST': str(os.getenv('DB_USERS_HOST')),
-        'PORT': '5432'
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'users.db.sqlite3'),
     },
     'company_db': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': str(os.getenv('DB_COMPANY_NAME')),
-        'USER': str(os.getenv('DB_USERS_USER')),
-        'PASSWORD': str(os.getenv('DB_USERS_PASSWORD')),
-        'HOST': str(os.getenv('DB_USERS_HOST')),
-        'PORT': '5432'
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'company.db.sqlite3'),
     }
 }
 
@@ -157,4 +166,4 @@ LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
 
-DATABASE_ROUTERS = ['routers.db_routers.AuthRouter', 'routers.db_routers.Company']
+DATABASE_ROUTERS = ['routers.db_routers.AuthRouter','routers.db_routers.Company' ]

@@ -1,5 +1,5 @@
 from rest_framework.fields import ModelField
-from django_filters.rest_framework import DjangoFilterBackend
+# from django_filters.rest_framework import DjangoFilterBackend
 
 from .serializers import CompanySerializer, PricesSerializer
 from .models import Company, Prices
@@ -51,7 +51,7 @@ class CompanyView(FormView):
 class CompanyViewSet(ModelViewSet):
     queryset = Company.objects.all()
     serializer_class = CompanySerializer
-    filter_backends = [DjangoFilterBackend]
+    # filter_backends = [DjangoFilterBackend]
 
 class PricesViewSet(ModelViewSet):
     queryset = Prices.objects.all()

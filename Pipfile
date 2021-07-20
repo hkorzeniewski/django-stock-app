@@ -51,6 +51,7 @@ yarg = "==0.1.9"
 Django = "==3.2.5"
 PyJWT = "==2.1.0"
 celery = "*"
+psycopg2-binary = "*"
 
 [dev-packages]
 
