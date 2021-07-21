@@ -4,10 +4,10 @@ import datetime
 
 
 class Prices(models.Model):
-    opening_price = models.DecimalField(max_digits=2, decimal_places=2)
-    highest_price = models.DecimalField(max_digits=2, decimal_places=2)
-    lowest_price = models.DecimalField(max_digits=2, decimal_places=2)
-    closing_price = models.DecimalField(max_digits=2, decimal_places=2)
+    opening_price = models.FloatField()
+    highest_price = models.FloatField()
+    lowest_price = models.FloatField()
+    closing_price = models.FloatField()
     date = models.DateField()
 
 
@@ -15,7 +15,7 @@ class Company(models.Model):
     COMPANY_NAMES = (
         ('ACP', 'ASSECO'),
         ('ALE', 'ALLEGRO'),
-        ('CCC', 'CCC')
+        ('PZU', 'PZU')
     )
     company_name = models.CharField(max_length=10, choices=COMPANY_NAMES)
-    prices = models.ManyToManyField(Prices)
+    prices = models.ManyToManyField(Prices, blank=True)

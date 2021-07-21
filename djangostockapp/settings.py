@@ -14,6 +14,17 @@ from pathlib import Path
 import os
 from dotenv import load_dotenv
 
+import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
+
+sentry_sdk.init(
+    dsn="https://c78a40a5c6a64fa9b99b61490df860fc@o925085.ingest.sentry.io/5873735",
+    integrations=[DjangoIntegration()],
+    traces_sample_rate=1.0,
+    send_default_pii=True
+)
+
+
 load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -29,7 +40,7 @@ SECRET_KEY = str(os.getenv('SECRET_KEY'))
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1']
 
 
 # Application definition
@@ -85,20 +96,12 @@ WSGI_APPLICATION = 'djangostockapp.wsgi.application'
 DATABASES = {
     'default': {},
     'users_db': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': str(os.getenv('DB_USERS_NAME')),
-        'USER': str(os.getenv('DB_USERS_USER')),
-        'PASSWORD': str(os.getenv('DB_USERS_PASSWORD')),
-        'HOST': str(os.getenv('DB_USERS_HOST')),
-        'PORT': '5432'
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'users.db.sqlite3'),
     },
     'company_db': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': str(os.getenv('DB_COMPANY_NAME')),
-        'USER': str(os.getenv('DB_USERS_USER')),
-        'PASSWORD': str(os.getenv('DB_USERS_PASSWORD')),
-        'HOST': str(os.getenv('DB_USERS_HOST')),
-        'PORT': '5432'
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'company.db.sqlite3'),
     }
 }
 
@@ -149,6 +152,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ]
 }
 
 AUTH_USER_MODEL = 'app_1.User'
@@ -157,4 +164,11 @@ LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
 
-DATABASE_ROUTERS = ['routers.db_routers.AuthRouter', 'routers.db_routers.Company']
+DATABASE_ROUTERS = ['routers.db_routers.AuthRouter','routers.db_routers.Company']
+
+CELERY_BROKER_URL = 'amqp://localhost:5672'
+CELERY_RESULT_BACKEND = 'amqp://localhost:5672'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'UTC'

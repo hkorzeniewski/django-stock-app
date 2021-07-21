@@ -17,9 +17,16 @@ from django.contrib import admin
 from django.urls import path, include
 
 
+def trigger_error(request):
+    print('hello')
+    division_by_zero = 1 / 0
+
+
+handler404 = 'app_2.views.page_not_found_view'
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('app_1.urls')),
-    path('', include('app_2.urls'))
+    path('', include('app_2.urls')),
+    path('sentry-debug/', trigger_error),
 ]

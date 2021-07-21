@@ -6,9 +6,11 @@ from .models import Company, Prices
 from rest_framework import serializers
 from rest_framework.decorators import action
 from rest_framework.response import Response
-
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+from rest_framework.permissions import IsAuthenticated
 
 from django.shortcuts import render, redirect
+from django.core.exceptions import PermissionDenied
 
 from rest_framework import generics
 from rest_framework.views import APIView
@@ -16,8 +18,10 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework.decorators import action
 
 from django.views.generic.edit import FormView
-
+from django.http import HttpResponseNotFound
 from .forms import GetCompanyDataRangeForm
+
+from sentry_sdk import capture_message
 # Create your views here.
 
 
@@ -25,12 +29,6 @@ def table_view(request):
     return render(request, 'table.html', {})
 
 
-# def form_view(request):
-#     form = GetCompanyDataRangeForm(request.POST or None)
-#     print(form)
-#     if form.is_valid():
-#         print(form)
-#     return render(request, "form.html", {"form": form})
 
 class CompanyView(FormView):
     # model = Company
@@ -52,7 +50,19 @@ class CompanyViewSet(ModelViewSet):
     queryset = Company.objects.all()
     serializer_class = CompanySerializer
     filter_backends = [DjangoFilterBackend]
+    authentication_classes = [SessionAuthentication, BasicAuthentication]
+    permission_classes = [IsAuthenticated]
+
 
 class PricesViewSet(ModelViewSet):
     queryset = Prices.objects.all()
     serializer_class = PricesSerializer
+
+
+def permission_denied_view(request):
+    raise PermissionDenied
+
+
+def page_not_found_view(*args, **kwargs):
+    capture_message("Page not found", level="error")
+    return HttpResponseNotFound("Not found")
