@@ -5,4 +5,4 @@ release: python manage.py migrate --database=users_db --no-input
 release: python manage.py migrate --database=company_db --no-input
 
 
-web: gunicorn petrolapp.wsgi
+web: gunicorn djangostockapp.wsgi
