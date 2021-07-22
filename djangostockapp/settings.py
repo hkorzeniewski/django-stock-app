@@ -41,7 +41,7 @@ SECRET_KEY = str(os.getenv('SECRET_KEY'))
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -179,10 +179,6 @@ AUTH_USER_MODEL = 'app_1.User'
 
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
-
-
-
-DATABASE_ROUTERS = ['routers.db_routers.AuthRouter','routers.db_routers.Company']
 
 CELERY_BROKER_URL = 'amqp://localhost:5672'
 CELERY_RESULT_BACKEND = 'amqp://localhost:5672'

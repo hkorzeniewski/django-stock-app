@@ -29,17 +29,18 @@ def home_view(request):
 
 
 def login_view(request):
-    print(request)
     form = LoginForm(request.POST or None)
     print(form)
     if form.is_valid():
         username = form.cleaned_data.get("username")
         password = form.cleaned_data.get("password")
-        user = authenticate(request, username=username, password=password)
-        if user != None:
+        # user = authenticate(username=username, password=password)
+        user = User.objects.filter(username=username, password=password).first()
+        if user is not None:
             login(request, user)
             return redirect("/")
         else:
+            print('invalid user')
             request.session['invalid_user'] = 1  # 1 == True
     return render(request, "login.html", {"form": form})
 

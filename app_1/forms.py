@@ -14,7 +14,7 @@ class LoginForm(forms.Form):
             }
         )
     )
-    # def clean(self):
-    #     data = super().clean()
-    #     username = data.get("username")
-    #     password = data.get("password")
+    def clean(self):
+        data = super().clean()
+        username = data.get("username")
+        password = data.get("password")
