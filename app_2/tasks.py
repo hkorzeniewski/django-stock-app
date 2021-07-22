@@ -9,15 +9,15 @@ from celery import Celery
 
 from celery.schedules import crontab
 
-# app = Celery('tasks')
-#
-# app.conf.beat_schedule = {
-#     # executes every 1 minute
-#     'scraping-task-one-min': {
-#         'task': 'tasks.hackernews_rss',
-#         'schedule': crontab()
-#     }
-# }
+app = Celery()
+
+app.conf.beat_schedule = {
+    # executes every 1 minute
+    'scraping-task-one-min': {
+        'task': 'tasks.stock_prices_rss',
+        'schedule': crontab(minute=0, hour=0)
+    }
+}
 
 def months(month):
     switcher = {
@@ -53,49 +53,46 @@ def convert_date_to_date_field(info):
 
 @shared_task
 def stock_prices_rss():
-    companies = ['ale', 'acp', 'pzu']
+    companies = ['PKO', 'ACP', 'PZU']
     print('Start scraping')
-    try:
-        print('hello te')
-        req = requests.get("https://stooq.pl/q/d/?s=acp")
-        soup = BeautifulSoup(req.content, 'html.parser')
-        company = Company.objects.get(company_name='ACP')
-        for x in soup.find_all("tr"):
-            if x.text[0:1].isdigit():
-                if x.text[4:5].isdigit():
-                    if x.text[5:6].isdigit():
-                        data = convert_date_to_date_field(x.text[4:15])
-                        opening = float(x.text[15:20])
-                        highest = float(x.text[20:25])
-                        lowest = float(x.text[25:30])
-                        closing = float(x.text[30:35])
-                        # opening = 33.33
-                        # highest = 22.22
-                        # lowest = 11.11
-                        # closing = 55.55
+    Prices.objects.all().delete()
+    for company in companies:
+        print(company)
+        try:
+            print('hello te')
+            req = requests.get("https://stooq.pl/q/d/?s=" + str(company))
+            soup = BeautifulSoup(req.content, 'html.parser')
+            company = Company.objects.get(company_name=company)
+            for x in soup.find_all("tr"):
+                if x.text[0:1].isdigit():
+                    if x.text[4:5].isdigit():
+                        if x.text[5:6].isdigit():
+                            data = convert_date_to_date_field(x.text[4:15])
+                            opening = float(x.text[15:20])
+                            highest = float(x.text[20:25])
+                            lowest = float(x.text[25:30])
+                            closing = float(x.text[30:35])
 
-                    else:
-                        data = convert_date_to_date_field(x.text[4:14])
-                        opening = float(x.text[14:19])
-                        highest = float(x.text[19:24])
-                        lowest = float(x.text[24:29])
-                        closing = float(x.text[29:34])
-                        # opening = 22.22
-                        # highest = 22.22
-                        # lowest = 11.11
-                        # closing = 55.55
 
-                    price = Prices.objects.create(
-                        opening_price=opening,
-                        highest_price=highest,
-                        lowest_price=lowest,
-                        closing_price=closing,
-                        date=data,
-                    )
-                    company.prices.add(price)
-                    company.save()
-    except Exception as e:
-        print('The scraping job failed. See exception:')
-        print(e)
+                        else:
+                            data = convert_date_to_date_field(x.text[4:14])
+                            opening = float(x.text[14:19])
+                            highest = float(x.text[19:24])
+                            lowest = float(x.text[24:29])
+                            closing = float(x.text[29:34])
+
+
+                        price = Prices.objects.create(
+                            opening_price=opening,
+                            highest_price=highest,
+                            lowest_price=lowest,
+                            closing_price=closing,
+                            date=data,
+                        )
+                        company.prices.add(price)
+                        company.save()
+        except Exception as e:
+            print('The scraping job failed. See exception:')
+            print(e)
 
 

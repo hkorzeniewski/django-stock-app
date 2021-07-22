@@ -22,12 +22,14 @@ from django.http import HttpResponseNotFound
 from .forms import GetCompanyDataRangeForm
 
 from sentry_sdk import capture_message
+
+
 # Create your views here.
 
 
-def table_view(request):
-    return render(request, 'table.html', {})
+def table(request):
 
+    return render(request, 'table.html', {})
 
 
 class CompanyView(FormView):
@@ -36,22 +38,30 @@ class CompanyView(FormView):
     template_name = 'form.html'
     success_url = 'table'
 
-
     def form_valid(self, form):
-        # context['form'] = form
+
         company_name = form.cleaned_data.get("company_name")
         start_date = form.cleaned_data.get("start_date")
         end_date = form.cleaned_data.get("end_date")
-        print(company_name, start_date, end_date)
-        return redirect('/table')
+        company = Company.objects.get(company_name=company_name)
+        print(company.prices.filter(date__range=[start_date, end_date]))
+        prices = company.prices.filter(date__range=[start_date, end_date])
+        context = {
+            "prices": prices,
+            "company_name": company_name
+        }
+        return render(self.request, 'table.html', context=context)
+        # return redirect('/table')
 
 
 class CompanyViewSet(ModelViewSet):
     queryset = Company.objects.all()
     serializer_class = CompanySerializer
     filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['company_name']
     authentication_classes = [SessionAuthentication, BasicAuthentication]
     permission_classes = [IsAuthenticated]
+
 
 
 class PricesViewSet(ModelViewSet):

@@ -4,17 +4,47 @@
 
 <head>
     <meta charset="UTF-8">
+    <style>
 
+    </style>
 </head>
 
 <body>
     {% block content %}
     <h1>TABLE PAGE</h1>
-    <div style="margin-left:25%;padding:1px 16px;height:1000px;">
+    <div style="margin-left:0%;padding:1px 16px;height:1000px;">
 
-        <title>Home</title>
-        <h2>{{form.company_name}}</h2>
+        <title>Table</title>
+        <h2> {{ company_name }} </h2>
+        <table style=" font-family: Arial, Helvetica, sans-serif;
+      border-collapse: collapse;
+      width: 80%;">
 
+                <tr>
+                    <td>Data  </td>
+                    <td>Opening price</td>
+                    <td>Highest price</td>
+                    <td>Lowest price</td>
+                    <td>Closing price</td>
+
+                </tr>
+                {% for price in prices %}
+
+                <tr>
+                    <td>{{ price.date}}  </td>
+                    <td>{{ price.opening_price }}</td>
+                    <td>{{ price.highest_price }}</td>
+                    <td>{{ price.lowest_price }}</td>
+                    <td>{{ price.closing_price }}</td>
+                </tr>
+
+
+                {% endfor %}
+
+
+        </table>
+    <a href="{% url 'form' %}" class="button button2">Form</a>
+    <a href="{% url 'logout' %}" class="button button2">Logout</a>
     </div>
 
 

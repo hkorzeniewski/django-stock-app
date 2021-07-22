@@ -8,7 +8,7 @@ router = routers.DefaultRouter()
 router.register(r'api/companies', views.CompanyViewSet)
 
 urlpatterns = [
-    path('table/', views.table_view, name='table'),
+    path('table/', views.table, name='table'),
     path('form/', views.CompanyView.as_view(), name='form')
 
 ]

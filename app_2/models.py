@@ -14,8 +14,11 @@ class Prices(models.Model):
 class Company(models.Model):
     COMPANY_NAMES = (
         ('ACP', 'ASSECO'),
-        ('ALE', 'ALLEGRO'),
+        ('PKO', 'PKOBP'),
         ('PZU', 'PZU')
     )
     company_name = models.CharField(max_length=10, choices=COMPANY_NAMES)
     prices = models.ManyToManyField(Prices, blank=True)
+
+    def __str__(self):
+        return '{}'.format(self.company_name)

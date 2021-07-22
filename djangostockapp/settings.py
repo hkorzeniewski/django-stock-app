@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 from pathlib import Path
 import os
+
 from dotenv import load_dotenv
 
 import sentry_sdk
@@ -95,6 +96,22 @@ WSGI_APPLICATION = 'djangostockapp.wsgi.application'
 
 DATABASES = {
     'default': {},
+    # 'users_db': {
+    #     'ENGINE': 'django.db.backends.postgresql_psycopg2',
+    #     'NAME': str(os.getenv('DB_USERS_NAME')),
+    #     'USER': str(os.getenv('DB_USERS_USER')),
+    #     'PASSWORD': str(os.getenv('DB_USERS_PASSWORD')),
+    #     'HOST': str(os.getenv('DB_USERS_HOST')),
+    #     'PORT': 5432
+    # },
+    # 'company_db': {
+    #     'ENGINE': 'django.db.backends.postgresql_psycopg2',
+    #     'NAME': str(os.getenv('DB_COMPANY_NAME')),
+    #     'USER': str(os.getenv('DB_USERS_USER')),
+    #     'PASSWORD': str(os.getenv('DB_USERS_PASSWORD')),
+    #     'HOST': str(os.getenv('DB_USERS_HOST')),
+    #     'PORT': 5432
+    # }
     'users_db': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'users.db.sqlite3'),
@@ -143,7 +160,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
-
+STATIC_ROOT = os.path.join(BASE_DIR,  'static')
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
@@ -164,6 +181,7 @@ LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
 
+
 DATABASE_ROUTERS = ['routers.db_routers.AuthRouter','routers.db_routers.Company']
 
 CELERY_BROKER_URL = 'amqp://localhost:5672'
@@ -172,3 +190,6 @@ CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'UTC'
+
+DATABASE_ROUTERS = ['routers.db_routers.AuthRouter','routers.db_routers.Company' ]
+
