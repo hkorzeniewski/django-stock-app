@@ -3,11 +3,9 @@ from .models import Company
 from django import forms
 
 
+
 class GetCompanyDataRangeForm(forms.Form):
-    company_name = forms.CharField(widget=forms.TextInput(
-        attrs={
-            "class": "form-control"
-        }))
+    company_name = forms.ModelChoiceField(queryset=Company.objects.all())
     start_date = forms.DateField(
         widget=forms.DateInput(
             attrs={
@@ -23,7 +21,3 @@ class GetCompanyDataRangeForm(forms.Form):
         )
     )
 
-# class CompanyForm(forms.ModelForm):
-#     class Meta:
-#         model = Company
-#         fields = ['company_name', 'start_date', 'end_date']
